@@ -85,22 +85,36 @@ export async function renderPoster(canvas:HTMLCanvasElement,options:PosterOption
   drawBurgundyAtmosphere(ctx,w,h);
   const logoWidth=square?190:265;ctx.drawImage(logo,78,square?30:44,logoWidth,logoWidth*logo.naturalHeight/logo.naturalWidth);
   text(ctx,EVENT.year,110,square?174:235,square?20:24,B.white,400,'Trophy');
-  // An editorial masthead balances the official mark rather than becoming a tiny caption.
-  const themeX=square?664:650,themeW=365;
-  const words=EVENT.themeHeadline.toUpperCase().split(/\s+/),lead=words.shift()||'',vision=(words.pop()||'').replace(/[.!:]$/,'')+'.',middle=words.join(' ');
-  displayWord(ctx,lead,themeX,square?48:65,square?22:24,5,'#EDD18A',themeW,500);
-  displayWord(ctx,middle,themeX,square?104:130,square?14:16,2.5,'#DABF76',58,500);
-  text(ctx,vision,themeX+(square?54:63),square?84:107,square?39:48,'#FFFCED',400,'Trophy');
-  textBox(ctx,EVENT.themeDetail,themeX,square?150:184,themeW,square?62:65,square?16:18,14,'#F2DBD8',400,3);
-  const themeRule=ctx.createLinearGradient(themeX,0,themeX+themeW,0);themeRule.addColorStop(0,'#F29E07AA');themeRule.addColorStop(1,'#F5CB0300');ctx.fillStyle=themeRule;ctx.fillRect(themeX,square?228:263,themeW,1);
-  // Signature announcement: tracked gold lead-in and optically set ivory/champagne capitals.
-  const headlineY=square?250:story?354:328,headlineSize=square?110:124;
-  displayWord(ctx,"I’M",80,headlineY-44,square?22:24,2.6,B.gold,140,600);
-  ctx.fillStyle=B.red;ctx.fillRect(78,headlineY-45,2,square?20:22);
-  const enamel=ctx.createLinearGradient(0,headlineY,0,headlineY+headlineSize*.85);
-  enamel.addColorStop(0,'#FFFEF4');enamel.addColorStop(.33,'#FFFFFF');enamel.addColorStop(.66,'#F4F5E8');enamel.addColorStop(.87,'#E3E9D9');enamel.addColorStop(1,'#D3B96F');
-  const announcementWidth=displayWord(ctx,'SPEAKING',74,headlineY,headlineSize,1.2,enamel,900);
-  const signatureRule=ctx.createLinearGradient(78,0,78+announcementWidth*.28,0);signatureRule.addColorStop(0,B.gold);signatureRule.addColorStop(1,'#F5CB0300');ctx.fillStyle=signatureRule;ctx.fillRect(78,headlineY+headlineSize*.8+14,announcementWidth*.28,2);
+  // Unified conference theme: one deliberate eyebrow and one Trophy headline.
+  const themeX = square ? 664 : 650;
+  const themeW = 365;
+  displayWord(ctx, 'BEYOND THE', themeX, square ? 51 : 66, square ? 19 : 21, 1.5, '#EDD18A', themeW, 600);
+  text(ctx, 'VISION.', themeX, square ? 84 : 99, square ? 47 : 52, '#FFFCED', 400, 'Trophy');
+  textBox(ctx, EVENT.themeDetail, themeX, square ? 153 : 172, themeW, 66, square ? 16 : 17, 13, '#F2DBD8', 400, 3);
+  const themeRule = ctx.createLinearGradient(themeX, 0, themeX + themeW, 0);
+  themeRule.addColorStop(0, '#F29E07AA');
+  themeRule.addColorStop(1, '#F5CB0300');
+  ctx.fillStyle = themeRule;
+  ctx.fillRect(themeX, square ? 229 : 259, themeW, 1);
+
+  // Reduce the main headline while retaining its existing position and visual identity.
+  const headlineY = square ? 250 : story ? 354 : 328;
+  const headlineSize = square ? 91 : 99;
+  displayWord(ctx, 'I’M', 80, headlineY - 44, square ? 22 : 24, 2.6, B.gold, 140, 600);
+  ctx.fillStyle = B.red;
+  ctx.fillRect(78, headlineY - 45, 2, square ? 20 : 22);
+  const enamel = ctx.createLinearGradient(0, headlineY, 0, headlineY + headlineSize * .85);
+  enamel.addColorStop(0, '#FFFEF4');
+  enamel.addColorStop(.33, '#FFFFFF');
+  enamel.addColorStop(.66, '#F4F5E8');
+  enamel.addColorStop(.87, '#E3E9D9');
+  enamel.addColorStop(1, '#D3B96F');
+  const announcementWidth = displayWord(ctx, 'SPEAKING', 74, headlineY, headlineSize, 1.2, enamel, 750);
+  const signatureRule = ctx.createLinearGradient(78, 0, 78 + announcementWidth * .28, 0);
+  signatureRule.addColorStop(0, B.gold);
+  signatureRule.addColorStop(1, '#F5CB0300');
+  ctx.fillStyle = signatureRule;
+  ctx.fillRect(78, headlineY + headlineSize * .8 + 14, announcementWidth * .28, 2);
   // Speaker distinction sits in the clear left column, below the announcement.
   // Keep this separate from the headline, portrait, event details and nameplate.
   const badgeX=78, badgeY=square?375:story?448:458, badgeW=300, badgeH=39;
@@ -114,7 +128,8 @@ export async function renderPoster(canvas:HTMLCanvasElement,options:PosterOption
   ctx.beginPath();ctx.roundRect(4,0,11,17,5);ctx.stroke();
   ctx.beginPath();ctx.moveTo(0,10);ctx.arc(9.5,10,10,Math.PI,0,true);ctx.moveTo(9.5,20);ctx.lineTo(9.5,25);ctx.moveTo(3,25);ctx.lineTo(16,25);ctx.stroke();ctx.restore();
   text(ctx,'FEATURED SPEAKER',badgeX+51,badgeY+9,18,'#4B0B20',700);
-  const frame=portraitFrame(format),plate=nameplateFrame(format,Number(!!p.title.trim())+Number(!!p.organization.trim()));
+  const frame = portraitFrame(format);
+  const plate = nameplateFrame(format); // Fixed height, regardless of optional fields.
   // Broad gold arch separates the portrait from the burgundy artwork; the photo is never stretched.
   const gold=ctx.createLinearGradient(frame.x,frame.y,frame.x+frame.w,frame.y+frame.h);
   gold.addColorStop(0,'#C38B20');gold.addColorStop(.2,'#F5CB03');gold.addColorStop(.38,'#FFF1AE');gold.addColorStop(.57,'#E6B62C');gold.addColorStop(.83,'#F5CB03');gold.addColorStop(1,'#BD7A18');
@@ -152,11 +167,58 @@ export async function renderPoster(canvas:HTMLCanvasElement,options:PosterOption
   ctx.lineTo(x+24,y+plate.h);ctx.quadraticCurveTo(x,y+plate.h,x,y+plate.h-24);ctx.lineTo(x,y+24);ctx.quadraticCurveTo(x,y,x+24,y);
   const paper=ctx.createLinearGradient(x,y,x+300,y+plate.h);paper.addColorStop(0,'#FFFDF5');paper.addColorStop(.5,'#F6F3E5');paper.addColorStop(1,'#EAE7D7');ctx.fillStyle=paper;ctx.fill();ctx.restore();
   ctx.strokeStyle='#FFFDF1C0';ctx.lineWidth=1.4;ctx.stroke();
-  const tx=x+43,ty=y+30,nameH=square?72:90;
-  const nameHeight=textBox(ctx,p.name.trim()||'Your name',tx,ty,plate.textWidth,nameH,square?49:57,20,'#540B21',650,2);
-  let lineY=ty+nameHeight+13;const rule=ctx.createLinearGradient(tx,0,tx+75,0);rule.addColorStop(0,B.gold);rule.addColorStop(1,'#F5CB0300');ctx.fillStyle=rule;ctx.fillRect(tx,lineY-5,75,2);
-  if(p.title.trim()){lineY+=textBox(ctx,p.title.trim(),tx,lineY+9,plate.textWidth,square?38:47,square?23:27,13,'#540B21',400,2)+15;}
-  if(p.organization.trim()){textBox(ctx,p.organization.trim(),tx,lineY+8,plate.textWidth,square?38:47,square?21:25,13,'#77505B',400,2);}
+  // Lay out name/title/organization inside a fixed-size panel.
+  // Each field is fitted independently, and the full stack is vertically scaled if necessary.
+  const tx = x + 43;
+  const insetTop = square ? 17 : 20;
+  const insetBottom = square ? 14 : 17;
+  const maxTextHeight = plate.h - insetTop - insetBottom;
+  const hasTitle = !!p.title.trim();
+  const hasOrganization = !!p.organization.trim();
+  const textWidth = plate.textWidth;
+  const name = p.name.trim() || 'Your name';
+  const measure = (value: string, size: number, weight: number) => {
+    ctx.font = `${weight} ${size}px "General Sans"`;
+    return ctx.measureText(value).width;
+  };
+  type Fitted = { lines: string[]; size: number; color: string; weight: number };
+  const fitted = (value: string, initial: number, min: number, maxLines: number, color: string, weight: number): Fitted => {
+    const result = fitText(value, textWidth, maxLines, initial, min, (line, size) => measure(line, size, weight));
+    return { ...result, lines: result.lines.slice(0, maxLines), color, weight };
+  };
+  const fields: Fitted[] = [
+    fitted(name, square ? 43 : 51, 19, 2, '#540B21', 650),
+  ];
+  if (hasTitle) fields.push(fitted(p.title.trim(), square ? 20 : 24, 12, 2, '#540B21', 400));
+  if (hasOrganization) fields.push(fitted(p.organization.trim(), square ? 18 : 22, 12, 2, '#77505B', 400));
+  const lineHeight = (field: Fitted) => field.size * 1.16;
+  const fieldHeight = (field: Fitted) => field.lines.length * lineHeight(field);
+  const gaps = fields.length > 1 ? 10 + (fields.length - 2) * 5 : 0;
+  const totalHeight = fields.reduce((sum, field) => sum + fieldHeight(field), 0) + gaps;
+  const scaleY = Math.min(1, maxTextHeight / Math.max(1, totalHeight));
+  ctx.save();
+  ctx.translate(0, y + insetTop);
+  ctx.scale(1, scaleY);
+  let cursor = 0;
+  fields.forEach((field, fieldIndex) => {
+    ctx.font = `${field.weight} ${field.size}px "General Sans"`;
+    ctx.fillStyle = field.color;
+    ctx.textBaseline = 'top';
+    field.lines.forEach((line, lineIndex) => ctx.fillText(line, tx, cursor + lineIndex * lineHeight(field)));
+    cursor += fieldHeight(field);
+    if (fieldIndex === 0 && fields.length > 1) {
+      cursor += 4;
+      const rule = ctx.createLinearGradient(tx, 0, tx + 75, 0);
+      rule.addColorStop(0, B.gold);
+      rule.addColorStop(1, '#F5CB0300');
+      ctx.fillStyle = rule;
+      ctx.fillRect(tx, cursor, 75, 2);
+      cursor += 8;
+    } else if (fieldIndex < fields.length - 1) {
+      cursor += 5;
+    }
+  });
+  ctx.restore();
   // Website stays on a quiet strip; the illustration remains to its right.
   ctx.strokeStyle=B.yellow;ctx.lineWidth=2;ctx.beginPath();ctx.arc(89,h-48,14,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.ellipse(89,h-48,6,14,0,0,Math.PI*2);ctx.moveTo(75,h-48);ctx.lineTo(103,h-48);ctx.stroke();
   text(ctx,EVENT.websiteLabel,124,h-59,22,B.white,400);
