@@ -83,8 +83,7 @@ export async function renderPoster(canvas:HTMLCanvasElement,options:PosterOption
   ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
   const square=format==='square',story=format==='story';
   drawBurgundyAtmosphere(ctx,w,h);
-  const logoWidth=square?190:265;ctx.drawImage(logo,78,square?30:44,logoWidth,logoWidth*logo.naturalHeight/logo.naturalWidth);
-  text(ctx,EVENT.year,110,square?174:235,square?20:24,B.white,400,'Trophy');
+  const logoWidth=square?175:240;ctx.drawImage(logo,78,square?30:44,logoWidth,logoWidth*logo.naturalHeight/logo.naturalWidth);
   // Unified conference theme: one deliberate eyebrow and one Trophy headline.
   const themeX = square ? 664 : 650;
   const themeW = 365;
@@ -97,19 +96,20 @@ export async function renderPoster(canvas:HTMLCanvasElement,options:PosterOption
   ctx.fillStyle = themeRule;
   ctx.fillRect(themeX, square ? 229 : 259, themeW, 1);
 
-  // Reduce the main headline while retaining its existing position and visual identity.
+  // Organizer-approved announcement: the official logo stays unchanged,
+  // with no redundant standalone year. The full statement is readable in two lines.
   const headlineY = square ? 250 : story ? 354 : 328;
-  const headlineSize = square ? 91 : 99;
-  displayWord(ctx, 'I’M', 80, headlineY - 44, square ? 22 : 24, 2.6, B.gold, 140, 600);
+  displayWord(ctx, 'I’M SPEAKING AT', 80, headlineY - 47, square ? 28 : 31, 1.3, B.gold, 680, 600);
   ctx.fillStyle = B.red;
-  ctx.fillRect(78, headlineY - 45, 2, square ? 20 : 22);
+  ctx.fillRect(78, headlineY - 49, 2, square ? 27 : 30);
+  const headlineSize = square ? 78 : 86;
   const enamel = ctx.createLinearGradient(0, headlineY, 0, headlineY + headlineSize * .85);
   enamel.addColorStop(0, '#FFFEF4');
   enamel.addColorStop(.33, '#FFFFFF');
   enamel.addColorStop(.66, '#F4F5E8');
   enamel.addColorStop(.87, '#E3E9D9');
   enamel.addColorStop(1, '#D3B96F');
-  const announcementWidth = displayWord(ctx, 'SPEAKING', 74, headlineY, headlineSize, 1.2, enamel, 750);
+  const announcementWidth = displayWord(ctx, 'WAD 2026', 74, headlineY, headlineSize, 1.2, enamel, 750);
   const signatureRule = ctx.createLinearGradient(78, 0, 78 + announcementWidth * .28, 0);
   signatureRule.addColorStop(0, B.gold);
   signatureRule.addColorStop(1, '#F5CB0300');
